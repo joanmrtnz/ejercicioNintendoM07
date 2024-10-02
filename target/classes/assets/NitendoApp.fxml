@@ -1,55 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<FlowPane fx:id="container" hgap="10.0" minHeight="100.0" minWidth="300.0" vgap="10.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.Controller">
+<AnchorPane fx:id="container" minHeight="100.0" minWidth="300.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.Controller">
    <children>
-      <TilePane alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="43.0" prefWidth="504.0" style="-fx-background-color: lightblue;" tileAlignment="TOP_LEFT">
-         <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nintendo DB" />
-         </children>
-      </TilePane>
-      <HBox maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="300.0" spacing="2.0">
-         <children>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="160.0" style="-fx-background-color: lightgray;">
+      <VBox spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" VBox.vgrow="ALWAYS">
+         <TilePane alignment="CENTER" style="-fx-background-color: lightblue;" tileAlignment="TOP_LEFT">
+            <children>
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nintendo DB" />
+            </children>
+         </TilePane>
+         <HBox spacing="10.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+            <VBox minWidth="150.0" style="-fx-background-color: lightgray;" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                <children>
-                  <ChoiceBox fx:id="choiceBox" prefWidth="150.0" />
-                  <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" style="-fx-background-color: gray;">
-                     <children>
-                        <ImageView fitHeight="50.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@images/90583d6a4aaafaa6567539ec834f3696.png" />
-                           </image>
-                        </ImageView>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Pikachu" />
-                     </children>
-                     <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0" />
+                  <ChoiceBox fx:id="choiceBox" />
+                  <ListView fx:id="listView" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
-            <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="341.0" style="-fx-background-color: gray;">
+            <VBox fx:id="detailsBox" alignment="CENTER" style="-fx-background-color: #f0f0f0;" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS">
                <children>
-                  <ImageView fitHeight="50.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/90583d6a4aaafaa6567539ec834f3696.png" />
-                     </image>
-                  </ImageView>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Pikachu" />
-                  <Text layoutX="10.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lorem ipsum dolor sit amet, consectetur adipiscing el." wrappingWidth="285.17578125" />
-               </children></VBox>
-         </children>
-      </HBox>
+                  <ImageView fx:id="imageViewLarge" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                  <Text fx:id="titleLarge" strokeType="OUTSIDE" strokeWidth="0.0" text="Selecciona un ítem" />
+                  <Text fx:id="descriptionLarge" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="285.0" />
+               </children>
+            </VBox>
+         </HBox>
+      </VBox>
    </children>
-</FlowPane>
+</AnchorPane>

@@ -1,4 +1,7 @@
 com\project\Main.class
+com\project\Main$1.class
+com\project\ControllerMobil$Item.class
 com\project\Controller.class
+com\project\ControllerMobil.class
+com\project\Controller$Item.class
 com\project\UtilsViews.class
-test.class

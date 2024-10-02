@@ -1,7 +1,7 @@
 package com.project;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
@@ -22,10 +22,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Controller {
-
-    @FXML
-    private ChoiceBox<String> choiceBox;
+public class ControllerMobil {
 
     @FXML
     private ListView<HBox> listView;
@@ -41,6 +38,15 @@ public class Controller {
 
     @FXML
     private Text descriptionLarge;
+
+    @FXML
+    private Button buttonConsolas;
+
+    @FXML
+    private Button buttonPersonajes;
+
+    @FXML
+    private Button buttonJuegos;
 
     public class Item {
         private Map<String, Object> properties;
@@ -72,59 +78,67 @@ public class Controller {
 
     @FXML
     public void initialize() {
-        choiceBox.getItems().addAll("Consolas", "Juegos", "Personajes");
-        choiceBox.setValue("Consolas");
+        buttonConsolas.setOnAction(event -> handleCategoryButton("Consolas"));
+        buttonPersonajes.setOnAction(event -> handleCategoryButton("Personajes"));
+        buttonJuegos.setOnAction(event -> handleCategoryButton("Juegos"));
 
-        loadJSONData("Consolas");
-
-        choiceBox.setOnAction(event -> handleChoiceBoxAction());
-
-        listView.setOnMouseClicked(event -> handleListItemClick());
+        listView.setVisible(false);
+        listView.setManaged(false); 
+        detailsBox.setVisible(false);
+        detailsBox.setManaged(false); 
     }
 
-    @FXML
-    private void handleChoiceBoxAction() {
-        String selected = choiceBox.getValue();
-        loadJSONData(selected);
+    private void handleCategoryButton(String category) {
+        loadJSONData(category);
+        listView.setVisible(true);
+        listView.setManaged(true); 
+        detailsBox.setVisible(false); 
+        detailsBox.setManaged(false); 
+
     }
 
     @FXML
     private void handleListItemClick() {
-        if (isDesktopMode()) {
-            HBox selectedItem = listView.getSelectionModel().getSelectedItem();
-            if (selectedItem != null) {
-                
-                Item item = (Item) selectedItem.getUserData();
+        HBox selectedItem = listView.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            Item item = (Item) selectedItem.getUserData();
 
-                if (item != null) {
-                    // Establecer los datos en detailsBox
+            if (item != null) {
+                // Establecer los datos en detailsBox
+                titleLarge.setText(item.getNom());
 
-                    titleLarge.setText(item.getNom());
-                    
-                    // Cargar la imagen
-                    String imagePath = "assets/images/" + item.getImatge();
-                    try (InputStream imageStream = getClass().getClassLoader().getResourceAsStream(imagePath)) {
-                        if (imageStream != null) {
-                            Image image = new Image(imageStream);
-                            imageViewLarge.setImage(image);
-                        } else {
-                            System.out.println("Error: No se pudo encontrar la imagen en la ruta: " + imagePath);
-                        }
-                    } catch (Exception e) {
-                        System.out.println("Error al cargar la imagen: " + imagePath);
-                        e.printStackTrace();
+                // Cargar la imagen
+                String imagePath = "assets/images/" + item.getImatge();
+                try (InputStream imageStream = getClass().getClassLoader().getResourceAsStream(imagePath)) {
+                    if (imageStream != null) {
+                        Image image = new Image(imageStream);
+                        imageViewLarge.setImage(image);
+                    } else {
+                        System.out.println("Error: No se pudo encontrar la imagen en la ruta: " + imagePath);
                     }
-
-                    // Mostrar propiedades adicionales en descriptionLarge
-                    StringBuilder description = new StringBuilder();
-                    for (Map.Entry<String, Object> entry : item.getProperties().entrySet()) {
-                        if (!entry.getKey().equals("nom") && !entry.getKey().equals("imatge")) {
-                            // Hago un capitalize de la key
-                            description.append(entry.getKey().toUpperCase().charAt(0) + entry.getKey().substring(1, entry.getKey().length())).append(": ").append(entry.getValue()).append("\n");
-                        }
-                    }
-                    descriptionLarge.setText(description.toString());
+                } catch (Exception e) {
+                    System.out.println("Error al cargar la imagen: " + imagePath);
+                    e.printStackTrace();
                 }
+
+                // Mostrar propiedades adicionales en descriptionLarge
+                StringBuilder description = new StringBuilder();
+                for (Map.Entry<String, Object> entry : item.getProperties().entrySet()) {
+                    if (!entry.getKey().equals("nom") && !entry.getKey().equals("imatge")) {
+                        // Hago un capitalize de la key
+                        description.append(entry.getKey().toUpperCase().charAt(0))
+                                   .append(entry.getKey().substring(1))
+                                   .append(": ")
+                                   .append(entry.getValue())
+                                   .append("\n");
+                    }
+                }
+                descriptionLarge.setText(description.toString());
+
+                listView.setVisible(false);
+                listView.setManaged(false); 
+                detailsBox.setVisible(true);
+                detailsBox.setManaged(true);
             }
         }
     }
@@ -151,12 +165,12 @@ public class Controller {
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                
+
                 Item item = new Item();
 
                 item.addProperty("nom", jsonObject.getString("nom"));
                 item.addProperty("imatge", jsonObject.getString("imatge"));
-                
+
                 for (String key : jsonObject.keySet()) {
                     if (!key.equals("nom") && !key.equals("imatge")) {
                         item.addProperty(key, jsonObject.get(key));
@@ -194,6 +208,8 @@ public class Controller {
 
             listView.setItems(items);
 
+            listView.setOnMouseClicked(event -> handleListItemClick());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -213,6 +229,11 @@ public class Controller {
     }
 
     public void setResponsiveListeners(Stage stage) {
+
+        if (isDesktopMode()) {
+            detailsBox.setVisible(true);
+            detailsBox.setManaged(true);
+        }
         stage.widthProperty().addListener((obs, oldVal, newVal) -> {
             double newWidth = newVal.doubleValue();
             listView.setPrefWidth(newWidth * 0.8);
